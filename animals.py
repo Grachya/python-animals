@@ -7,7 +7,7 @@ class Animal:
 
     def feed(self):
         self.feed_state = 'full'
-        print('{} is feeded'.format(self.name))
+        return '{} is feeded'.format(self.name)
 
     def voice(self):
         print(self.voice_type)
@@ -52,8 +52,14 @@ goat_horns = Goat('Рога', 'мееее')
 goat_hoofs = Goat('Копыта', 'мееее')
 mallard_duck = Duck('Кряква', 'кря-кря')
 
+# feed all animals
 
-# feed 
+all_animals = [grey_goose, white_goose, cow, rammy_sheep, cyrly_sheep, goat_horns, goat_hoofs, mallard_duck]
+
+for animal in all_animals:
+    print(animal.feed())
+
+
 
 
 
