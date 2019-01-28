@@ -1,10 +1,13 @@
-# animal classes
-class Animal:
+from abc import ABC, abstractmethod
+
+# abstract base animal class
+
+
+class Animal(ABC):
     feed_state = 'hungry'
 
-    def __init__(self, name, voice_type, weight):
+    def __init__(self, name, weight):
         self.name = name
-        self.voice_type = voice_type
         self.weight = weight
 
     def __add__(self, other):
@@ -13,118 +16,162 @@ class Animal:
     def __gt__(self, other):
         return self.weight > other.weight
 
+    @abstractmethod
+    def feed(self):
+        pass
+
+    @abstractmethod
+    def voice(self):
+        pass
+
+    @abstractmethod
+    def collect(self):
+        pass
+
+# animals inheritance    
+    
+
+class Goose(Animal):
+    eggs_state = 'full'
+    voice_type = 'га-га-га'
+
     def feed(self):
         self.feed_state = 'full'
-        return '{} is feeded'.format(self.name)
+        print('Goose {} now is full'.format(self.name))
+
+    def collect(self):
+        self.eggs_state = 'empty'
+        print('Eggs were collected from {} goose'.format(self.name))
 
     def voice(self):
         print(self.voice_type)
 
 
-class Goose(Animal):
-    eggs_state = 'full'
-
-    def collect_eggs(self):
-        self.eggs_state = 'empty'
-        print('Eggs were collected from {} goose'.format(self.name))
-
-
 class Cow(Animal):
     milk_state = 'full'
+    voice_type = 'мууу'
 
-    def milking(self):
+    def feed(self):
+        self.feed_state = 'full'
+        print('Cow {} now is full'.format(self.name))
+
+    def collect(self):
         self.milk_state = 'empty'
         print('Cow {} was milked'.format(self.name))
+
+    def voice(self):
+        print(self.voice_type)
 
 
 class Sheep(Animal):
     wool_state = 'full'
+    voice_type = 'бееее'
 
-    def shear(self):
+    def feed(self):
+        self.feed_state = 'full'
+        print('Sheep {} now is full'.format(self.name))
+
+    def collect(self):
         self.wool_state = 'empty'
         print('Sheep {} was sheared'.format(self.name))
+
+    def voice(self):
+        print(self.voice_type)
 
 
 class Chicken(Animal):
     eggs_state = 'full'
+    voice_type = 'ко-ко-ко'
 
-    def collect_eggs(self):
+    def feed(self):
+        self.feed_state = 'full'
+        print('Chicken {} now is full'.format(self.name))
+
+    def collect(self):
         self.eggs_state = 'empty'
         print('Eggs were collected from {} chicken'.format(self.name))
+
+    def voice(self):
+        print(self.voice_type)
 
 
 class Goat(Animal):
     milk_state = 'full'
+    voice_type = 'мееее'
 
-    def milking(self):
+    def feed(self):
+        self.feed_state = 'full'
+        print('Goat {} now is full'.format(self.name))
+
+    def collect(self):
         self.milk_state = 'empty'
         print('Goat {} was milked'.format(self.name))
+
+    def voice(self):
+        print(self.voice_type)
 
 
 class Duck(Animal):
     eggs_state = 'full'
+    voice_type = 'кря-кря'
 
-    def collect_eggs(self):
+    def feed(self):
+        self.feed_state = 'full'
+        print('Duck {} now is full'.format(self.name))
+
+    def collect(self):
         self.eggs_state = 'empty'
         print('Eggs were collected from {} duck'.format(self.name))
+
+    def voice(self):
+        print(self.voice_type)
 
 # animal instances
 
 
-grey_goose = Goose('Серый', 'га-га-га', 12)
-white_goose = Goose('Белый', 'га-га-га', 14)
-cow = Cow('Манька', 'мууу', 104)
-rammy_sheep = Sheep('Барашек', 'бееее', 52)
-cyrly_sheep = Sheep('Кудрявый', 'бееее', 56)
-goat_horns = Goat('Рога', 'мееее', 47)
-goat_hoofs = Goat('Копыта', 'мееее', 43)
-mallard_duck = Duck('Кряква', 'кря-кря', 16)
+grey_goose = Goose('Серый', 12)
+white_goose = Goose('Белый', 14)
+cow = Cow('Манька', 104)
+rammy_sheep = Sheep('Барашек', 52)
+cyrly_sheep = Sheep('Кудрявый', 56)
+coco_chicken = Chicken('Ко-ко', 10)
+kukareku_chicken = Chicken('Кукареку', 9)
+goat_horns = Goat('Рога', 47)
+goat_hoofs = Goat('Копыта', 43)
+mallard_duck = Duck('Кряква', 16)
+
+
+# animals list
+
+animal_list = [
+    grey_goose,
+    white_goose,
+    cow,
+    rammy_sheep,
+    cyrly_sheep,
+    coco_chicken,
+    kukareku_chicken,
+    goat_horns,
+    goat_hoofs,
+    mallard_duck
+]
 
 
 # feed all animals
 
-all_animals = [grey_goose, white_goose, cow, rammy_sheep, cyrly_sheep, goat_horns, goat_hoofs, mallard_duck]
+for animal in animal_list:
+    animal.feed()
 
-for animal in all_animals:
-    print(animal.feed())
+# collect something from each animal
 
-# some action with each animal
+for animal in animal_list:
+    animal.collect()
 
-grey_goose.collect_eggs()
-white_goose.collect_eggs()
-cow.milking()
-rammy_sheep.shear()
-cyrly_sheep.shear()
-goat_horns.milking()
-goat_hoofs.milking()
-mallard_duck.collect_eggs()
 
 # total animals weight
-
-
-def get_total_animals_weight():
-
-    total_weight = 0
-
-    for animal in all_animals:
-        total_weight += animal.weight
-
-    return total_weight
-
-
-print('Total animals weight is {}'.format(get_total_animals_weight()))
+total_animals_weight = sum(animal.weight for animal in animal_list)
+print('Total animals weight is {}'.format(total_animals_weight))
 
 # the heaviest animal
-
-
-def get_heaviest_animal_name():
-    heaviest_animal = all_animals[0]
-
-    for animal_inst in all_animals:
-        if heaviest_animal < animal_inst:
-            heaviest_animal = animal_inst
-
-    return heaviest_animal.name
-
-
-print('The heaviest animal is {}'.format(get_heaviest_animal_name()))
+heaviest_animal_name = max(animal_list, key=lambda animal: animal.weight)
+print('The heaviest animal is {}'.format(heaviest_animal_name.name))
