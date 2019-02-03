@@ -1,27 +1,30 @@
-cook_book = {}
+def get_cook_book():
+    cook_book = {}
+    with open('./recipes.txt', encoding="utf-8") as file:
+        for k, line in enumerate(file):
+            ingredients_list = []
+            if k > 0:
+                dish = file.readline().strip()
+            else:
+                dish = line.strip()
+            ingredients_len = int(file.readline().strip())
+            while ingredients_len > 0:
+                ingredient = {}
+                ingredient_list = file.readline().strip().split('|')
+                ingredient['ingredient_name'] = ingredient_list[0].strip()
+                ingredient['quantity'] = ingredient_list[1].strip()
+                ingredient['measure'] = ingredient_list[2].strip()
+                ingredients_len -= 1
+                ingredients_list.append(ingredient)
+            cook_book[dish] = ingredients_list
+    return cook_book
 
-with open('./recipes.txt', encoding="utf-8") as file:
-    for k, line in enumerate(file):
-        ingredients_list = []
-        if k > 0:
-            dish = file.readline().strip()
-        else:
-            dish = line.strip()
-        ingredients_len = int(file.readline().strip())
-        while ingredients_len > 0:
-            ingredient = {}
-            ingredient_list = file.readline().strip().split('|')
-            ingredient['ingredient_name'] = ingredient_list[0].strip()
-            ingredient['quantity'] = ingredient_list[1].strip()
-            ingredient['measure'] = ingredient_list[2].strip()
-            ingredients_len -= 1
-            ingredients_list.append(ingredient)
-        cook_book[dish] = ingredients_list
 
-print(cook_book)
+print(get_cook_book())
 
 
 def get_shop_list_by_dishes(dishes, person_count):
+    cook_book = get_cook_book()
     ingredients_dict = {}
     for item in dishes:
         dish_ingredients = cook_book[item]
@@ -40,4 +43,3 @@ def get_shop_list_by_dishes(dishes, person_count):
 
 
 print(get_shop_list_by_dishes(['Запеченный картофель', 'Омлет'], 2))
-
