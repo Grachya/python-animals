@@ -3,8 +3,12 @@
 
 import requests
 import time
+import codecs
+import json
 
 TOKEN = 'bd1d62485df3c40b2c192b088e445d08b35c358738947d913caf694ef8b6dfed41fa25eb6f40e0b4abe1d'
+
+user = input('Введите id пользователя из ВК: ')
 
 
 class User:
@@ -46,6 +50,7 @@ class User:
             'user_ids': user_ids
         }
         res = requests.get('https://api.vk.com/method/groups.isMember', params)
+        print('-', end=" ")
         return res.json()['response']
 
     def get_group_by_id(self, group_id):
@@ -53,19 +58,38 @@ class User:
             'v': '5.92',
             'access_token': TOKEN,
             'group_id': group_id,
+            'fields': 'members_count'
         }
         res = requests.get('https://api.vk.com/method/groups.getById', params)
         return res.json()['response']
 
 
-evgeny = User('171691064')
+evgeny = User(user)
 evgeny_groups = evgeny.get_groups()['items']
 evgeny_friends = evgeny.get_friends()['items']
 string_of_friends = ','.join([str(x) for x in evgeny_friends])
 
+list_of_groups = []
+
+print('Loading', end=" ")
+
 for group in evgeny_groups:
+    group_description = {}
     group_info = evgeny.get_group_by_id(str(group))
-    is_member_in_group = list(filter(lambda x: x['member'] == 1, evgeny.is_member(group, string_of_friends)))
+    try:
+        is_member_in_group = list(filter(lambda x: x['member'] == 1, evgeny.is_member(group, string_of_friends)))
+    except KeyError:
+        print('Too many requests in one second. Please try again.')
+        break
     if len(is_member_in_group) == 0:
-        print(f'В группе {group_info[0]["name"]} ни состоит ни один из его друзей')
+        group_description['name'] = group_info[0]["name"]
+        group_description['gid'] = group_info[0]["id"]
+        group_description['members_count'] = group_info[0]["members_count"]
+        list_of_groups.append(group_description)
     time.sleep(2)
+
+with codecs.open('groups.json', 'w', 'utf-8') as file:
+    data = list_of_groups
+    json.dump(data, file, ensure_ascii=False, indent=2)
+
+print('Finished')
