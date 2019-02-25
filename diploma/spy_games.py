@@ -6,7 +6,7 @@ import time
 import codecs
 import json
 
-TOKEN = 'bd1d62485df3c40b2c192b088e445d08b35c358738947d913caf694ef8b6dfed41fa25eb6f40e0b4abe1d'
+TOKEN = 'test'
 
 user = input('Введите id пользователя из ВК: ')
 
